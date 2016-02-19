@@ -1,0 +1,38 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://cdn.socket.io/socket.io-1.4.3.js"></script>
+</head>
+<body>
+
+
+	<canvas id="canvas" width="500" height="887" style="border: 1px solid #cccccc;"></canvas>
+	<br/>
+	<img id="bj" src="/bj" style="width: 500px"></img>
+
+	<script>
+		var socket = io();
+		socket.on('new message', function(msg){
+			var max = 25;
+			var c=document.getElementById("canvas");
+		    var ctx=c.getContext("2d");
+		    var img=document.getElementById("bj");
+		    ctx.drawImage(img,0,0,img.clientWidth,img.clientHeight);
+		    ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+	        ctx.fillRect(0, 550, 500, 48);
+	        ctx.font = "200 25px Helvetica";
+	        ctx.fillStyle = "white";
+	        ctx.textAlign = "center";
+	        if (ctx.measureText(msg.message).width > 500) {
+	        	ctx.fillText("text too long noob", 250, 585);
+	        } else {
+	        	ctx.fillText(msg.message, 250, 585);
+	        }
+	        console.log("done");
+	        socket.emit("loaded", {"image": document.getElementById("canvas").toDataURL(), "to": msg.to});
+		});
+	</script>
+
+</body>
+</html>
